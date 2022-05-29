@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Sequence Detection</title>
+    <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+// the secretcode only exists of 7 letters, so if you type 7 letters, it will show all 7. If you add one more, it will take away the first typed letter and add the new one 
+const pressed = []; 
+const secretCode = 'irisvdb';
+
+window.addEventListener('keyup', (e) => {
+    console.log(e.key); // When pressing a key, it will show you which key was pressed in console
+    pressed.push(e.key);
+    pressed.splice(-secretCode.length -1, pressed.length - secretCode.length) // start from the end, if you have 6 letters, it will go to the 7th letter from the back
+    if(pressed.join('').includes(secretCode)) {
+        console.log('You guessed it!');
+        cornify_add(); // this will add js to the page, when entering the correct secretCode
+    } // type pressed.join('') into console, to show the string of the type letter/numbers 
+    console.log(pressed); // everytime a key has been pressed, it will be put in an array, seperated by commas. a = ["a"], b = ["a", "b"]
+});
+</script>
+    
+</body>
+</html>

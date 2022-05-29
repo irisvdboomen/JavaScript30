@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Synthesis</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="voiceinator">
+
+      <h1>The Voiceinator</h1>
+
+      <select name="voice" id="voices">
+        <option value="">Select A Voice</option>
+      </select>
+
+      <label for="rate">Rate:</label>
+      <input name="rate" type="range" min="0" max="2" value="1" step="0.1"> <!-- I changed the max value to 2, because over 2 you couldn't even hear the voice anymore because of the speed-->
+
+      <label for="pitch">Pitch:</label>
+
+      <input name="pitch" type="range" min="0" max="2" step="0.1">
+      <textarea name="text">Hello! Type something and it will be said by the Voiceinator </textarea> <!-- rate, pitch and text are important, don't change-->
+      <button id="stop">Stop</button>
+      <button id="speak">Speak</button>
+
+    </div>
+
+<script>
+  const msg = new SpeechSynthesisUtterance(); // utterance means "what is the person going to say", on the utterance it will contain information about how fast they will say it, what is the pitch, what is the voice they will say it in and what will they say. we'll create a new version in the message
+  let voices = []; // empty array where the voices will be put into
+  const voicesDropdown = document.querySelector('[name="voice"]');
+  const options = document.querySelectorAll('[type="range"], [name="text"]');
+  const speakButton = document.querySelector('#speak');
+  const stopButton = document.querySelector('#stop');
+  msg.text = document.querySelector('[name="text"]').value;
+
+  function populateVoices() {
+      voices = this.getVoices();
+    //   console.log(voices); // will show you all google voices (language + name). We want to loop over each of the voices and get those as options
+    const voiceOptions = voices
+        // .filter(voice => voice.lang.includes('en')) this add a filter, which only has english voices, so all the other voices are left out
+        .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+        .join('');
+        voicesDropdown.innerHTML = voiceOptions; // innerHTML sets or returns the HTML content  of an element
+  }
+
+  function setVoice() {
+    //   console.log('Changing voice');
+    // console.log(this.value);
+    msg.voice = voices.find(voice => voice.name === this.value); // will loop over all the voices in console and will find the name attribute which is the same as the one selected
+    toggle();
+    // console.log(this.value); 'this' is now looking at the voice that is changed
+  }
+
+  function toggle(startOver = true) {
+      speechSynthesis.cancel();
+      if(startOver) {
+      speechSynthesis.speak(msg); // when typing toggle(false) in console, the voice will immediately stop talking, when typing toggle() it will start again
+      }
+  }
+
+  function setOption() {
+      console.log(this.name, this.value); // 'this' is now either input, input or textarea information
+      msg[this.name] = this.value;
+      toggle();
+  }
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  voicesDropdown.addEventListener('change', setVoice); // this + the function will change the options and actually select it and use that specific voice
+  options.forEach(option => option.addEventListener('change', setOption));
+  speakButton.addEventListener('click', toggle);
+  //   stopButton.addEventListener('click', toggle.bind(null, false)); // bind: take a function and you take it in the context of this pass it an argument of false
+  // or create another function:
+  stopButton.addEventListener('click', () => toggle(false));
+
+  // when typing options in console, you will see there are only three options that can have an action: input, input and textarea
+
+</script>
+
+</body>
+</html>

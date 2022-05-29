@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Speed Scrubber</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrapper">
+    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" loop controls></video>
+    <div class="speed">
+      <div class="speed-bar">1×</div>
+    </div>
+  </div>
+
+<script>
+    const speed = document.querySelector('.speed');
+    const bar = document.querySelector('.speed-bar');
+    const video = document.querySelector('.flex');
+
+    function handleMove(e) {
+        const y = e.pageY - this.offsetTop; // in case you add text above this, this will move with it. you will see how high or low the mouse is in the box
+        // console.log(y);
+        const percentage = y / this.offsetHeight; // to show the percentage between 0-1, where 0 is the top and 1 is the bottom
+        console.log(percentage);
+        const min = 0.4; // if it would be 0, you wouldn't hear anything anymore
+        const max = 4;
+        const height = Math.round(percentage * 100) + '%'; // right now instead of 0.1 it will be 10%, without any decimal (math.round)
+        const playbackRate = percentage * (max - min) + min;
+        // console.log(height);
+        bar.style.height = height; // when going over the speedbox, the bar will change color depending on where you are with the mouse
+        bar.textContent = playbackRate.toFixed(2) + 'x'; // toFixed to channge how many decimals. textContent to change the content when moving the mouse
+        video.playbackRate = playbackRate;
+    }
+
+    speed.addEventListener('mousemove', handleMove);
+
+</script>
+</body>
+</html>

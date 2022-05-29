@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flex Panels </title>
+  <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <style>
+    html {
+		box-sizing: border-box;
+		background: #ffc600;
+		font-family: 'helvetica neue';
+		font-size: 20px;
+		font-weight: 200;
+    }
+    
+    body {
+      margin: 0;
+    }
+    
+    *, *:before, *:after {
+		box-sizing: inherit;
+    }
+
+    .panels {
+		min-height: 100vh;
+		overflow: hidden;
+		display: flex;
+    }
+
+    .panel {
+		background: #6B0F9C;
+		box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
+		color: white;
+		text-align: center;
+		align-items: center;
+		/* Safari transitionend event.propertyName === flex */
+		/* Chrome + FF transitionend event.propertyName === flex-grow */
+		transition:
+			font-size 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+			flex 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+			background 0.2s;
+		font-size: 20px;
+		background-size: cover;
+		background-position: center;
+		flex: 1;  /* The panels will be evenly distributed over the entire page */
+		justify-content: center;
+		align-items: center;
+		display: flex; /* will put all words on one line, in the center of the page */
+		flex-direction: column; /* will put the words, in one column, under each other */
+    }
+
+	.panel1 { background-image: url(https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80); }
+	.panel2 { background-image: url(https://images.unsplash.com/photo-1460039230329-eb070fc6c77c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=975&q=80); }
+	.panel3 { background-image: url(https://images.unsplash.com/photo-1442458017215-285b83f65851?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=375&q=80); }
+	.panel4 { background-image: url(https://images.unsplash.com/photo-1475872711536-95ec04b9d290?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxzZWFyY2h8NTN8fGZsb3dlcnN8ZW58MHx8MHw%3D&auto=format&fit=crop&w=1000&q=60); }
+	.panel5 { background-image: url(https://images.unsplash.com/photo-1505129013025-ecf8f0168373?ixid=MXwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDh8fHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60); }
+
+    /* Flex Children */
+    .panel > * {
+		margin: 0;
+		width: 100%;
+		transition: transform 0.5s;
+		/* border: 1px solid black;*/ /* just to see what it is selected (will align the words */
+		flex: 1 0 auto; /* will spraid the words into 3 by 5 boxes */
+		display: flex;
+		justify-content: center;
+		align-items: center; /* justify-content and align-items will put the words in the center of the boxes */
+    }
+
+	.panel > *:first-child { transform: translateY(-100%); } /* will take of the words in the top row */
+	.panel.open-active > *:first-child { transform: translateY(0); }
+	.panel > *:last-child { transform: translateY(100%); } /* will take off the words in the bottom row */
+	.panel.open-active > *:last-child { transform: translateY(0); }
+
+
+    .panel p {
+		text-transform: uppercase;
+		font-family: 'Amatic SC', cursive;
+		text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
+		font-size: 2em;
+    }
+    
+    .panel p:nth-child(2) {
+    	font-size: 4em;
+    }
+
+    .panel.open {
+		flex: 5; /* when one panel open, it will make the other panels smaller, and then opened one wider. */
+		font-size: 40px;
+    }
+
+  </style>
+
+
+  <div class="panels">
+    <div class="panel panel1">
+		<p>Hey</p>
+      	<p>Let's</p>
+      	<p>Dance</p>
+    </div>
+    <div class="panel panel2">
+      	<p>Give</p>
+      	<p>Take</p>
+      	<p>Receive</p>
+    </div>
+    <div class="panel panel3">
+      	<p>Experience</p>
+      	<p>It</p>
+      	<p>Today</p>
+    </div>
+    <div class="panel panel4">
+      	<p>Give</p>
+      	<p>All</p>
+      	<p>You can</p>
+    </div>
+    <div class="panel panel5">
+      	<p>Life</p>
+      	<p>In</p>
+      	<p>Motion</p>
+    </div>
+  </div>
+
+  <script>
+	//   listening on each individual panel, don't use panels
+	  const panels = document.querySelectorAll('.panel');
+
+	  function toggleOpen() {
+		  console.log('Hello');
+		  this.classList.toggle('open');
+	  }
+
+	  function toggleActive(e) {
+		  console.log(e.propertyName);  // this will show what changes, when the panel is clicked. (Also check .panel.open)
+		  if(e.propertyName.includes('flex')) {
+			  this.classList.toggle('open-active');
+		  }
+	  }
+
+	// take each of these panels, loop over each panel, listen for a click on each of the panels, run toggle function when it is running.
+	  panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+	  panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
+
+	// we listen for a click on each panel, when someone clicks, we will open it, this will trigger a css open, and when that finishes, transitionend will fire and then we will go through the function toggleActive
+
+  </script>
+
+
+
+</body>
+</html>

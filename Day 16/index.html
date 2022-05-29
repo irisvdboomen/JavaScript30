@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow movement</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="hero">
+        <h1 contenteditable>Hello! :)</h1>
+      </div>
+    
+    <script>
+        const hero = document.querySelector('.hero');
+        const text = hero.querySelector('h1');
+        const walk = 600; // px. the bigger the number, the further away for the text
+
+        function shadow(e) {
+            const width = hero.offsetWidth;
+            const height = hero.offsetHeight;
+            // const { offsetWidth: width, offsetHeight: height } = hero // you can also use this instead of the above
+            let { offsetX: x, offsetY: y } = e;
+            // console.log(x, y); // the let {offsetX etc} + console.log will show the points of x and y. use let because it is possible that the values will be reassigned
+
+            // console.log(this, e.target);
+            if(this !== e.target) { // 'this' is the thing you listened on, e.target is the thing it triggered on, so either hero, or h1 contenteditable
+            x = x + e.target.offsetLeft;
+            y = y + e.target.offsetTop;
+            }
+
+            const xWalk = Math.round((x / width * walk) - (walk / 2)); // if 100 is our walk, 50 is as high as we should go and -50 is as low as we should go. left is -50, right is 50
+            const yWalk = Math.round((y / height * walk) - (walk / 2)); // math.round will take away number behind the comma
+
+            console.log(xWalk, yWalk); // left top: -50, -50. left bottom: -50, 50. right top: 50, -50. right bottom: 50, 50.
+
+            text.style.textShadow = `
+            ${xWalk}px ${yWalk}px 0 rgba(153, 204, 255), 
+            ${xWalk * -1}px ${yWalk}px 0 rgba(230, 153, 255),
+            ${yWalk}px ${xWalk * -1}px 0 rgba(172, 0, 230),
+            ${yWalk * -1}px ${xWalk}px 0 rgba(153, 204, 0)
+            `;
+
+        }
+
+        hero.addEventListener('mousemove', shadow);
+    </script>    
+</body>
+</html>

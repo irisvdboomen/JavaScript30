@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hold Shift to Check Multiple Checkboxes</title>
+</head>
+<body>
+  <style>
+
+/* 4.34 time */
+    html {
+      font-family: sans-serif;
+      /* two colors in the background */
+      background: #7551b6;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to left, #34a7ca, #7551b6);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to left, #34a7ca, #7551b6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    }
+
+    .inbox {
+      max-width: 400px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.329);
+      border-radius: 20px; /* rounded corners*/
+      border: 1px solid rgba(0, 0, 0, 0.24);
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.1); /* the shadow is visible on the right side and on the bottom (10px), between the brackets is the color of the shadow */ 
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #00000038; /* the line in between all sentences*/
+    }
+
+    .item:last-child {
+      border-bottom: 0;
+    }
+
+    input:checked + p {
+      background:#a881f171; /* will change the background of the checked item*/
+      text-decoration: line-through;
+    }
+
+    input[type="checkbox"] {
+      margin: 20px; /* the distance of the checkbox */ 
+    }
+
+    p {
+      margin: 0;
+      padding: 20px;
+      transition: background 0.2s; /* has a bit of a delay when clicking the checkbox */
+      flex: 1;
+      font-family:'Helvetica';
+      font-size: 20px;
+      font-weight: 200;
+      border-left: 1px solid #15171a; /* line inbetween checkbox and sentence*/
+    }
+  </style>
+   <!--
+   The following is a common layout you would see in an email client.
+   When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
+  -->
+  <div class="inbox">
+    <div class="item">
+      <input type="checkbox">
+      <p>This is an inbox layout.</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Check one item</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Hold down your Shift key</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Check a lower item</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Everything in between should also be set to checked</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Try to do it without any libraries</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Just regular JavaScript</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Good Luck!</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Don't forget to tweet your result!</p>
+    </div>
+  </div>
+
+<script>
+  // Select all the checkboxes (querySelectorAll) for the class inbox 
+    const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]'); 
+    console.log(checkboxes);// When looking at the console, you will see that all checkboxes are selected instead of console.log(checkboxes), you can also type checkboxes in the console
+    
+    let lastChecked; // use let, this will be re-assigned constantly
+
+    // function handleCheck(e) {
+    //     console.log(e); // now when a checkbox is clicked, you will see it in the console as a mouseevent
+    // }
+
+    function handleCheck(e) {
+        // Check if they had the shift key down
+        // AND check that they are checking it, not unchecking it
+        // if the event shiftKey is there, which means they are holding it down
+
+        let inBetween = false;
+        if(e.shiftKey && this.checked) {
+            // do what we please
+        // we will loop through every single checkbox, create variable inbetween. For all boxes checked inbetween,  variable inbetween is true. the last checked box is false  
+            checkboxes.forEach(checkbox => {
+                console.log(checkbox);
+                // if the checkbox is equal to this or to lastChecked (this is the one that is checked)
+                if(checkbox === this || checkbox === lastChecked) {
+                    inBetween = !inBetween; // if it is true, it is false. if it is false it is true.
+                    console.log('In between these sentences are checked boxes')
+                }
+
+                if (inBetween) {
+                    checkbox.checked = true; // now when clicking one, holding down shift and clicking another one, everything in between will be selected
+                }
+            });
+        } 
+
+        lastChecked = this; // now when clicking one of the checkboxes, type in console lastChecked and it will show you which one had been clicked
+    }
+
+
+    checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck)); // take checkboxes and loop over each one, listen for a click. When it is clicked, we will run the function handleCheck
+
+</script>
+</body>
+</html>

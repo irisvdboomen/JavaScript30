@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click and Drag</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="items">
+    <div class="item item1">01</div>
+    <div class="item item2">02</div>
+    <div class="item item3">03</div>
+    <div class="item item4">04</div>
+    <div class="item item5">05</div>
+    <div class="item item6">06</div>
+    <div class="item item7">07</div>
+    <div class="item item8">08</div>
+    <div class="item item9">09</div>
+    <div class="item item10">10</div>
+    <div class="item item11">11</div>
+    <div class="item item12">12</div>
+    <div class="item item13">13</div>
+    <div class="item item14">14</div>
+    <div class="item item15">15</div>
+    <div class="item item16">16</div>
+    <div class="item item17">17</div>
+    <div class="item item18">18</div>
+    <div class="item item19">19</div>
+    <div class="item item20">20</div>
+    <div class="item item21">21</div>
+    <div class="item item22">22</div>
+    <div class="item item23">23</div>
+    <div class="item item24">24</div>
+    <div class="item item25">25</div>
+  </div>
+
+<script>
+    // selecting the items
+    const slider = document.querySelector('.items');
+    let isDown = false; // let because the variables will be updates. will be either false or true depending on if i am clicking or not
+    let startX; // will mark the number of where it is clicked
+    let scrollLeft;
+
+slider.addEventListener('mousedown', (e) => { // when clicking and moving, isDown will work
+    isDown = true;
+    slider.classList.add('active'); // class active (CSS) will be add when clicking
+    // console.log(e.pageX); // when someone clicks down, before they start moving the mouse, we should record where they clicked down (add (e) to see, then console log pageX to see exactly where they clicked horizontally)
+    startX = e.pageX - slider.offsetLeft // to know where they clicked inside of the 0.98 box, not the entire page
+    scrollLeft = slider.scrollLeft;
+});
+
+slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
+});
+
+slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
+});
+
+slider.addEventListener('mousemove', (e) => {
+    if(!isDown) return; // stop function from running, so now only when clicking and moving console will log it
+    // console.count(isDown); // to count how many times this happens
+    // console.log('Yes')
+    // console.log(startX);
+    e.preventDefault(); // will stop from selecting any text that's inside
+    const x = e.pageX - slider.offsetLeft;
+    // figure out where the cursor is when moving the mouse
+    // console.log({x, startX});
+    const walk = x - startX; // how far we have moved from the clicked space. When going left from the clicked space, we will get negative values
+    console.log(walk);
+    // slider.scrollLeft = walk; // jumpy and will recalculate the offsetLeft everytime and start over
+    slider.scrollLeft = scrollLeft - walk; // now we actually get the movement when clicking
+});
+
+</script>
+
+  </body>
+</html>

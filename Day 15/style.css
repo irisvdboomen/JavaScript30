@@ -1,0 +1,71 @@
+html {
+    box-sizing: border-box;
+    background-color: #ce9df7;
+    min-height: 100vh; /* 100% of the viewport */
+    display: flex;
+    justify-content: center; /*put content horizontally in center */
+    align-items: center;
+    text-align: center; /* put text in center*/
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+*, 
+*::before, 
+*::after {
+    box-sizing: inherit;
+}
+
+.wrapper {
+    padding: 20px;
+    max-width: 350px;
+    background: rgba(164, 64, 211, 0.555);
+    box-shadow: 0 0 0 10px rgba(177, 45, 238, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin: 0;
+    font-weight: 200; /* make the font bolder/less bold*/
+}
+
+.plates {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    list-style: none; /* this will remove the dot in front of the list*/
+}
+
+.plates li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px 0; /* 10 px on the top/bottom, 0 left/right  */
+    font-weight: 100;
+    display: flex;
+}
+
+.plates label {
+    flex: 1;
+    cursor: pointer;
+}
+
+.plates input {
+    display: none; /* takes the checkbox away*/
+}
+
+.plates input + label:before {
+    content: "⬜️";
+    margin-right: 10px;
+}
+
+.plates input:checked + label:before {
+    content: "🌮";
+}
+
+.add-items {
+    margin-top: 20px;
+}
+
+.add-items input {
+    padding: 10px;
+    outline: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1)
+}

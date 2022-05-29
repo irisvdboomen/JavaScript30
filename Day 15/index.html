@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <h2>Local Tapas</h2>
+        <ul class="plates">
+            <li>Loading Tapas...</li>
+        </ul>
+        <form class="add-items">
+            <input type="text" name="item" placeholder="Item name" required> <!-- you need to fill in the bar, before clicking submit-->
+            <input type="submit" value="+ Add item">
+        </form>
+    </div>
+    <script>
+        const addItems = document.querySelector('.add-items');
+        const itemsList = document.querySelector('.plates');
+        const items = JSON.parse(localStorage.getItem('items')) || []; // The data will be stored in an array. It will try finding it in localStorage, if not it will go to an array
+
+        function addItem(e) {
+            // will stop the page from loading by default
+            e.preventDefault();            
+            // console.log('Hello');
+            const text = (this.querySelector('[name=item]')).value; // 'this' is the whole form tag
+            const item = {
+            text: text, // the second text will be replaced by what is added
+            done: false
+            };
+            // console.log(item);
+            // we want to put the items in the item array
+            items.push(item); // add the item
+            populateList(items, itemsList); // put it in a list
+            localStorage.setItem('items', JSON.stringify(items)); // this will store it. Check application or type localStorage.getItem('items') in console
+            this.reset(); // will clear the text box, after entering an item to list
+        }
+
+        function populateList(plates = [], platesList) {
+            platesList.innerHTML = plates.map((plate, i) => { // we are going to loop over every single item in our array, we will then map (a map will take in an array of raw data and return an array of some other data). We will take in the objects and return a string
+                return `
+                    <li>
+                        <input type="checkbox" data-index=${i} id="items${i}"${plate.done ? 'checked' : ''}/> 
+                        <label for="items${i}">${plate.text}</label>
+                    </li>
+                `; // if the plate.done is true, then we will put 'checked', otherwise it won't do anything
+            }).join(''); // since map will return an array, we need to join everything in one big string 
+        }
+
+        function toggleDone(e) {
+            if(!e.target.matches('input')) return; // skip this unless it's an input
+            // console.log(e.target);
+            const el = e.target;
+            // console.log(el.dataset.index);
+            const index = el.dataset.index;
+            items[index].done = !items[index].done; // if this is true, it will be the opposite, so false. and other way around. when a box is checked, it will be true. unchecked = false
+            localStorage.setItem('items', JSON.stringify(items));
+            populateList(items, itemsList);
+        }
+
+        // will listen for the submit event, this will also count for when pressing 'enter'
+        addItems.addEventListener('submit', addItem);
+        itemsList.addEventListener('click', toggleDone);
+        
+        populateList(items, itemsList); // when refreshing the page, the item that were inputted before, will stay
+        // const checkBoxes = document.querySelectorAll('input');
+
+        // checkBoxes.forEach(input.addEventListener('click', () => alert('hi')));
+    </script>
+</body>
+</html>

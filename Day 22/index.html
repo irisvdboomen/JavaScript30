@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Follow Along Nav</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+      <ul class="menu">
+        <li><a href="">Home</a></li>
+        <li><a href="">Order Status</a></li>
+        <li><a href="">Tweets</a></li>
+        <li><a href="">Read Our History</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul>
+    </nav>
+
+    <div class="wrapper">
+      <p>Lorem ipsum dolor sit amet, <a href="">consectetur</a> adipisicing elit. Est <a href="">explicabo</a> unde natus necessitatibus esse obcaecati distinctio, aut itaque, qui vitae!</p>
+      <p>Aspernatur sapiente quae sint <a href="">soluta</a> modi, atque praesentium laborum pariatur earum <a href="">quaerat</a> cupiditate consequuntur facilis ullam dignissimos, aperiam quam veniam.</p>
+      <p>Cum ipsam quod, incidunt sit ex <a href="">tempore</a> placeat maxime <a href="">corrupti</a> possimus <a href="">veritatis</a> ipsum fugit recusandae est doloremque? Hic, <a href="">quibusdam</a>, nulla.</p>
+      <p>Esse quibusdam, ad, ducimus cupiditate <a href="">nulla</a>, quae magni odit <a href="">totam</a> ut consequatur eveniet sunt quam provident sapiente dicta neque quod.</p>
+      <p>Aliquam <a href="">dicta</a> sequi culpa fugiat <a href="">consequuntur</a> pariatur optio ad minima, maxime <a href="">odio</a>, distinctio magni impedit tempore enim repellendus <a href="">repudiandae</a> quas!</p>
+    </div>
+
+  <script>
+    const triggers = document.querySelectorAll('a'); // select every single link
+    const highlight = document.createElement('span');; // will make the highlight ourselves
+    highlight.classList.add('highlight'); // add class highlight
+    document.body.append(highlight); // put it on the DOM
+
+    function highlightLink() {
+        // console.log('Highlight');
+        // console.log(this); // 'this' will show which link is entered
+        const linkCoord = this.getBoundingClientRect(); // will show the position on page and width and height of the link box
+        console.log(linkCoord);
+        
+        const coords = { // when scrolling the page the highlight should stay on the element. so use coords with this below to make sure it will work
+            width: linkCoord.width,
+            height: linkCoord.height,
+            top: linkCoord.top + window.scrollY,
+            left: linkCoord.left + window.scrollX
+        }
+
+        highlight.style.width = `${coords.width}px`; // instead of linkCoord use coords
+        highlight.style.height = `${coords.height}px`; 
+        // will add the box that matches the original box, when hovering over the link. If you change anything in the highlight class in css, you will see the change when hovering over the elements.
+        highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`; // will change the position of the changing box. use left and top, because it will be the first direction. When using right, it will pop in from the right and bottom from the bottom
+
+    }
+
+    triggers.forEach(a => a.addEventListener('mouseenter', highlightLink)); // everytime the mouse goes over a link (not clicking yet), it will run the function highlightLink
+
+  </script>
+</body>
+</html>

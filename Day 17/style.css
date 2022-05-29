@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /* background: url('image/Arnarstapi.JPG'); */
+  background-color: #dd8df5;
+  background-size: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#bands {
+  list-style: inside decimal;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.315);
+  width: 300px;
+  margin: auto;
+  padding: 0;
+  box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+#bands li {
+  border-bottom: 1px solid #efefef62;
+  padding: 10px;
+}
+
+#bands li::selection {
+    background: #b857d6;
+}
+#bands li:last-child {
+  border-bottom: 0;
+}
+
+a {
+  color: #ffc600;
+  text-decoration: none;
+}

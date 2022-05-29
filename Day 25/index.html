@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+<p>Trying to understand JavaScript's Capture, open the console</p>
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after { 
+    box-sizing: inherit; 
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: rgb(223, 174, 223);
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+
+<button></button>
+<script>
+    const divs = document.querySelectorAll('div'); // take all divs
+    const button = document.querySelector('button');
+    
+    function logText(e) {
+        console.log(this.classList.value);
+        // e.stopPropagation(); // now when clicking each seperate div, you will just see 3, or 2, or 1. (won't bubble together anymore)
+        // when you change capture to true, it will console one instead of 3. 
+        // console.log(this); // 
+    }
+
+    // document.body.addEventListener('click', logText); 
+
+    divs.forEach(div => div.addEventListener('click', logText, {
+        capture: false, // now it won't run on the bubble up, but on the bubble down. So when capture is true: clicking div 1, you will see div 1, 2 and 3. When capture is false: clicking div 1, you will see div 3, 2, 1. By default capture is false
+        once: true // will listen for click and unbind itself. Is the same as saying div.removeEventListener('click', logText);
+        // will run once
+
+
+    }));
+    // when someone clicks the div, we will log it
+    // when clicking just 3rd div, it will console the 1st, 2nd and 3rd div, since they are all bubbled together. when clicking the 1st div, you will just see the 1st div
+
+    button.addEventListener('click', () => {
+        console.log('Click');
+    }, {
+        once: true // now, if you click the button, it will only work once. Check console
+    });
+
+</script>
+</body>
+</html>

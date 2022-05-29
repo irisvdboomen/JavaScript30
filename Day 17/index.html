@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sort Without Articles</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <ul id="bands"></ul>
+
+<script>
+const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
+
+function strip(bandName) {
+    return bandName.replace(/^(a |the |an )/i, '').trim(); // i means insensitive, so doesn't matter if it is upper or lowercase. Be aware of the spacing between | !
+}
+
+const sortedBands = bands.sort((a, b) => { //instead of function(a, b) do (a, b) =>
+    return strip(a) > strip(b) ? 1 : -1; // same as below
+    // const SortedBands = bands.sort((a, b) => strip(a) > strip(b) ? 1 : -1);
+    // or
+    //if(strip(a) > strip(b)) {
+    //     return 1;
+    // } else {
+    //     return -1;
+    });
+
+    document.querySelector('#bands').innerHTML = 
+        sortedBands
+        .map(band => `<li>${band}</li>`)
+        .join(''); // need join, otherwise by default a comma will be added between all elements
+
+console.log(sortedBands);
+
+</script>
+</body>
+</html>

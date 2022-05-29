@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+    // the first element in the document with id 'draw' will be used
+    const canvas = document.querySelector('#draw');
+    // We draw on the context in 2d, can also be in 3d
+    const ctx = canvas.getContext('2d');
+
+    // resize window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.strokeStyle = '#BADA55'; // color of the stroke
+    ctx.lineJoin = 'round'; // when two lines meet, they will be rounded
+    ctx.lineCap = 'round'; // end of the line
+    ctx.lineWidth = 100;
+    // ctx.globalCompositeOperation = 'multiply'; // when going over an already drawn stroke, it will blend and turn black. (Eventually the whole canvas will be black)
+
+    let isDrawing = false; // this will makek sure that the line is only drawn, when pressing down with your mouse. When clicking down you set it to false, when letting go, it will be set to true
+    let lastX = 0; // now the begin point of x and y is at 0, this will be updated
+    let lastY = 0;
+    let hue = 0;
+    let direction = true;
+
+    function draw(e) {
+        if(!isDrawing) return; // stop the function from running when they are not moused down
+        // everything below the if-statement will only run, when the mouse is down and in the canvas
+
+        console.log(e);
+        ctx.strokeStyle = `hsl(${hue}, 70%, 70%)`; // I used different percentages
+        ctx.beginPath();
+        // start from
+        ctx.moveTo(lastX, lastY);
+        // go to
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+        // lastX = e.offsetX; // now the begin point won't keep starting at 0, but will be updated
+        // lastY = e.offsetY;
+        hue++; // this will change the color when going over the canvas
+        if(hue >= 360) {
+            hue = 0; // color will be resetted
+        }
+
+        // if it is greater than 100, flip the direction or if it is less than 1, also flip the direction
+        if(ctx.lineWidth >= 150 || ctx.lineWidth <= 50) {
+            direction = !direction;
+        }
+        // depending on what the direction is, we either implement or decrement the linewidth
+        if(direction) {
+        ctx.lineWidth++;
+        } else {
+        ctx.lineWidth--;
+        }
+    }
+
+    canvas.addEventListener('mousedown', (e) => {isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY]; // now you can draw anywhere, won't start at 0 
+    });
+
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false); // when mouse leaves the canvas and re-enters, the drawing will stop
+
+</script>
+<style>
+    html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>

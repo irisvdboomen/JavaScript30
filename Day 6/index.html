@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajax Type Ahead </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+// external website with the cities
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+// empty array to put our cities into
+const cities = [];
+
+// fetch our data
+
+// const prom = fetch(endpoint);
+// console.log(prom) 
+// doesn't return the data, but will return the promise
+
+// to get an array of all thousand cities:
+fetch(endpoint)
+    .then(blob => blob.json())
+    // .then(data => console.log(data))
+    .then(data => cities.push(...data));
+
+// to get the data into the cities, change console.log(data)) to cities.push(...data))
+
+function findMatches(wordToMatch, cities) {
+    return cities.filter(place => {
+        // here we need to figure out if the city or state matches what was searched
+        // g = global (will look through the entire string)
+        // i = insensitive, will match even if it is uppercase/lower case
+       const regex = new RegExp(wordToMatch, 'gi');
+
+       return place.city.match(regex) || place.state.match(regex)
+
+    });
+
+}
+
+// this function was called numberWithCommas in the video and instead of the . they used a comma (line 54), because this isn't how we display thousands in Europe, I changed it. So now the population will be shown as e.g. 110.077 instead of 110077
+function numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+// will be called whenever someone changes the value in the search bar
+
+function displayMatches() {
+    // console.log(this.value);
+    const matchArray = findMatches(this.value, cities);
+    // console.log(matchArray);  when typing something in the search bar, you will see in the console if there are any matches
+    const html = matchArray.map(place => {
+        const regex = new RegExp(this.value, 'gi');
+        const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+        const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+
+        return `
+        <li>
+            <span class="name">${cityName}, ${stateName}</span>
+            <span class="population">${numberWithDot(place.population)}</span>
+        </li>
+        `;
+    }).join('');
+
+    suggestions.innerHTML = html;
+}
+
+// class = search (line 11)
+const searchInput = document.querySelector('.search');
+// class = suggestions (line 12)
+const suggestions = document.querySelector('.suggestions');
+
+// when the input changes, we will run findMatches
+searchInput.addEventListener('change', displayMatches);
+// you will also get a result when a key has been pressed
+searchInput.addEventListener('keyup', displayMatches);
+
+</script>
+</body>
+</html>
